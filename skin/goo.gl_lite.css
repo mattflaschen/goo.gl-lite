@@ -1,0 +1,9 @@
+#goo_gl_lite_button 
+{
+    list-style-image: url("chrome://goo.gl_lite/skin/icon_24x24.png")
+}
+
+toolbar[iconsize="small"] #goo_gl_lite_button 
+{
+    list-style-image: url("chrome://goo.gl_lite/skin/icon_16x16.png")
+}

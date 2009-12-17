@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+		xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+	<Description about="urn:mozilla:install-manifest">
+		<em:name>goo.gl lite</em:name>
+		<em:version>1.0</em:version>
+		<em:description>Simple extension to let you use Goo.gl, Google's URL shortener, without installing their toolbar.  Clicking the button will generate a goo.gl URL and copy it to your clipboard</em:description>
+		<em:creator>Matthew Flaschen (matthew.flaschen@gatech.edu)</em:creator>
+		<em:id>goo.gl_lite@matthew.flaschen.gatech.edu</em:id>
+		
+		<em:targetApplication>
+			<!-- Firefox -->
+			<Description>
+				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+				<em:minVersion>3.0</em:minVersion>
+				<em:maxVersion>3.5.*</em:maxVersion>
+			</Description>
+		</em:targetApplication>
+		
+		<em:iconURL></em:iconURL>
+		<em:homepageURL></em:homepageURL>
+	</Description>
+</RDF>
