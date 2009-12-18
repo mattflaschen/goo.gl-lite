@@ -18,8 +18,5 @@
 				<em:maxVersion>3.5.*</em:maxVersion>
 			</Description>
 		</em:targetApplication>
-		
-		<em:iconURL></em:iconURL>
-		<em:homepageURL></em:homepageURL>
 	</Description>
 </RDF>
