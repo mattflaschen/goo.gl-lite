@@ -47,6 +47,7 @@
 			<fileset dir="${src.dir}">
 				<include name="chrome.manifest" />
 				<include name="install.rdf" />
+				<include name="GPL2" />
 				<include name="defaults/**" />
 				<exclude name="**/.*" />
 				<exclude name="**/CVS/**" />
