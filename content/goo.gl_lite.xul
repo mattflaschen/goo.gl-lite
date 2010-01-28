@@ -28,7 +28,14 @@
 
   <toolbarpalette id="BrowserToolbarPalette">
     <toolbarbutton id="goo_gl_lite_button" class="toolbarbutton-1"
-		   label="&goo.gl_lite.button_label;" tooltiptext="&goo.gl_lite.button_tooltip;"
-		   oncommand="goo_gl_lite.button_command(event);"/>
+		   label="&goo.gl_lite.toolbar_button_label;" tooltiptext="&goo.gl_lite.toolbar_button_tooltip;"
+		   oncommand="goo_gl_lite.make_from_current_page();"/>
   </toolbarpalette>
+
+  <popup id="contentAreaContextMenu">
+    <menuitem id="context-goo_gl_lite-current" label="&goo.gl_lite.context_current_label;" accesskey="&goo.gl_lite.context_current_accesskey;" insertafter="context-bookmarkpage" oncommand="goo_gl_lite.make_from_current_page();"/>
+    <menuitem id="context-goo_gl_lite-link" label="&goo.gl_lite.context_link_label;" accesskey="&goo.gl_lite.context_link_accesskey;" insertafter="context-copylink" oncommand="goo_gl_lite.make_from_link();"/>
+  </popup>
+      
+
 </overlay>

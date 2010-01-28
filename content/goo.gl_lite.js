@@ -22,7 +22,31 @@ goo_gl_lite = new function()
 	const gClipboardHelper = Components.classes["@mozilla.org/widget/clipboardhelper;1"].
 	getService(Components.interfaces.nsIClipboardHelper);
 
-	this.button_command = function(e)
+	const notificationValue = "goo.gl lite notification";
+	const iconURL = "chrome://goo.gl_lite/skin/icon_16x16.png";
+
+	/**
+	 * Basic initiation
+	 */
+	this.init = function()
+	{
+		document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", goo_gl_lite.popupshowing, false);
+	};
+
+	/**
+	 * Show/hide context menu entries on demand
+	 */
+	this.popupshowing = function()
+	{
+		gContextMenu.showItem("context-goo_gl_lite-current", !(gContextMenu.isContentSelected || gContextMenu.onTextInput || gContextMenu.onLink || gContextMenu.onImage || gContextMenu.onVideo || gContextMenu.onAudio)); // Shows Copy Goo.gl URL for This Page whenever Bookmark This Page is shown
+		gContextMenu.showItem("context-goo_gl_lite-link", gContextMenu.onLink && !gContextMenu.onMailtoLink); // Shows Copy Goo.gl URL for Link Location whenver Bookmark this Link is shown.
+	};
+
+	/**
+	 * Makes a short url from long_url
+	 * @param long_url long url, unescaped.
+	 */
+	this.make_short_url = function(long_url)
 	{
 		var req = new XMLHttpRequest();
 		req.addEventListener("load", function()
@@ -30,17 +54,47 @@ goo_gl_lite = new function()
 			var response = JSON.parse(req.responseText);
 			if(response.error_message)
 			{
-				throw new Error("[goo.gl lite] Goo.gl gateway failed with error message: " + response.error_message);
+				goo_gl_lite.error("Gateway returned error message: " + response.error_message);
 			}
+			goo_gl_lite.notify(response.short_url + " has been copied to the clipboard.  Shortened from " + long_url, "PRIORITY_INFO_MEDIUM");
 			gClipboardHelper.copyString(response.short_url);
 		}, false);
 		req.addEventListener("error", function()
 		{
-			throw new Error("[goo.gl lite] Goo.gl request failed with status: " + req.status);
+			goo_gl_lite.error("Error contacting gateway.  Status code: " + req.status);
 		}, false);
 		req.open("GET", "http://ggl-shortener.appspot.com/?url=" +
-			 encodeURIComponent( top.getBrowser().currentURI.spec));
+			 encodeURIComponent(long_url));
 
 		req.send();
 	};
+
+	/**
+	 * @param text Text of notification
+	 * @param priorityKey key to specify priority, as string
+	 */
+	this.notify = function(text, priorityKey)
+	{
+		var notifyBox = window.getNotificationBox(top.getBrowser().selectedBrowser.contentWindow);
+		notifyBox.removeAllNotifications(false);
+		notifyBox.appendNotification("Goo.gl Lite: " + text, this.notificationValue, this.iconURL, notifyBox[priorityKey], null);
+	};
+
+	this.error = function(error_text)
+	{
+		this.notify("Short URL creation failed: " + error_text, "PRIORITY_WARNING_MEDIUM");
+		throw new Error("[goo.gl lite] Short URL creation failed: " + error_text);
+	};
+
+	this.make_from_current_page = function()
+	{
+		this.make_short_url(top.getBrowser().currentURI.spec);
+	};
+
+	this.make_from_link = function()
+	{
+		this.make_short_url(gContextMenu.linkURL);
+	};
 }();
+
+window.addEventListener("load", goo_gl_lite.init, false);

@@ -16,5 +16,9 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
-<!ENTITY goo.gl_lite.button_label "Goo.gl">
-<!ENTITY goo.gl_lite.button_tooltip "Copy a goo.gl short URL for the current page to clipboard.">
+<!ENTITY goo.gl_lite.toolbar_button_label "Goo.gl">
+<!ENTITY goo.gl_lite.toolbar_button_tooltip "Copy a goo.gl short URL for the current page to clipboard.">
+<!ENTITY goo.gl_lite.context_current_label "Copy Goo.gl URL for This Page">
+<!ENTITY goo.gl_lite.context_current_accesskey "G">
+<!ENTITY goo.gl_lite.context_link_label "Copy Goo.gl URL for Link Location">
+<!ENTITY goo.gl_lite.context_link_accesskey "l">
