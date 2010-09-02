@@ -54,18 +54,17 @@ goo_gl_lite = new function()
 			var response = JSON.parse(req.responseText);
 			if(response.error_message)
 			{
-				goo_gl_lite.error("Gateway returned error message: " + response.error_message);
+				goo_gl_lite.error("Goo.gl returned error message: " + response.error_message);
 			}
 			goo_gl_lite.notify(response.short_url + " has been copied to the clipboard.  Shortened from " + long_url, "PRIORITY_INFO_MEDIUM");
 			gClipboardHelper.copyString(response.short_url);
 		}, false);
 		req.addEventListener("error", function()
 		{
-			goo_gl_lite.error("Error contacting gateway.  Status code: " + req.status);
+			goo_gl_lite.error("Error contacting goo.gl.  Status code: " + req.status);
 		}, false);
-		req.open("GET", "http://ggl-shortener.appspot.com/?url=" +
-			 encodeURIComponent(long_url));
-
+		req.open("POST", "http://goo.gl/api/shorten?url=" + encodeURIComponent(long_url));
+		req.setRequestHeader("X-Auth-Google-Url-Shortener", "true");
 		req.send();
 	};
 
