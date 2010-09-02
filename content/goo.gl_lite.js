@@ -77,6 +77,10 @@ goo_gl_lite = new function()
 		var notifyBox = window.getNotificationBox(top.getBrowser().selectedBrowser.contentWindow);
 		notifyBox.removeAllNotifications(false);
 		notifyBox.appendNotification("Goo.gl Lite: " + text, this.notificationValue, this.iconURL, notifyBox[priorityKey], null);
+		setTimeout(function()
+		{
+		        notifyBox.removeAllNotifications(false);
+		}, 5000);
 	};
 
 	this.error = function(error_text)
