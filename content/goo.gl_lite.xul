@@ -35,6 +35,7 @@
   <popup id="contentAreaContextMenu">
     <menuitem id="context-goo_gl_lite-current" label="&goo.gl_lite.context_current_label;" accesskey="&goo.gl_lite.context_current_accesskey;" insertafter="context-bookmarkpage" oncommand="goo_gl_lite.make_from_current_page();"/>
     <menuitem id="context-goo_gl_lite-link" label="&goo.gl_lite.context_link_label;" accesskey="&goo.gl_lite.context_link_accesskey;" insertafter="context-copylink" oncommand="goo_gl_lite.make_from_link();"/>
+    <menuitem id="context-goo_gl_lite-image-url" label="&goo.gl_lite.context_image_url_label;" accesskey="&goo.gl_lite.context_image_url_accesskey;" insertafter="context-copyimage" oncommand="goo_gl_lite.make_from_image_url();"/>
   </popup>
       
 

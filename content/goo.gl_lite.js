@@ -40,6 +40,7 @@ goo_gl_lite = new function()
 	{
 		gContextMenu.showItem("context-goo_gl_lite-current", !(gContextMenu.isContentSelected || gContextMenu.onTextInput || gContextMenu.onLink || gContextMenu.onImage || gContextMenu.onVideo || gContextMenu.onAudio)); // Shows Copy Goo.gl URL for This Page whenever Bookmark This Page is shown
 		gContextMenu.showItem("context-goo_gl_lite-link", gContextMenu.onLink && !gContextMenu.onMailtoLink); // Shows Copy Goo.gl URL for Link Location whenver Bookmark this Link is shown.
+		gContextMenu.showItem("context-goo_gl_lite-image-url", gContextMenu.onImage);
 	};
 
 	/**
@@ -97,6 +98,11 @@ goo_gl_lite = new function()
 	this.make_from_link = function()
 	{
 		this.make_short_url(gContextMenu.linkURL);
+	};
+
+	this.make_from_image_url = function()
+	{
+		this.make_short_url(gContextMenu.target.src);
 	};
 }();
 

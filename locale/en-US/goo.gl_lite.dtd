@@ -22,3 +22,5 @@
 <!ENTITY goo.gl_lite.context_current_accesskey "G">
 <!ENTITY goo.gl_lite.context_link_label "Copy Goo.gl URL for Link Location">
 <!ENTITY goo.gl_lite.context_link_accesskey "l">
+<!ENTITY goo.gl_lite.context_image_url_label "Copy Goo.gl URL for Image Location">
+<!ENTITY goo.gl_lite.context_image_url_accesskey "U">
