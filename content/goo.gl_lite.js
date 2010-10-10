@@ -22,6 +22,7 @@ goo_gl_lite = new function()
 	const gClipboardHelper = Components.classes["@mozilla.org/widget/clipboardhelper;1"].
 	getService(Components.interfaces.nsIClipboardHelper);
 
+	var stringBundle;
 	const notificationValue = "goo.gl lite notification";
 	const iconURL = "chrome://goo.gl_lite/skin/icon_16x16.png";
 
@@ -31,6 +32,7 @@ goo_gl_lite = new function()
 	this.init = function()
 	{
 		document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", goo_gl_lite.popupshowing, false);
+		stringBundle = document.getElementById("goo_gl_lite_strings");
 	};
 
 	/**
@@ -55,14 +57,14 @@ goo_gl_lite = new function()
 			var response = JSON.parse(req.responseText);
 			if(response.error_message)
 			{
-				goo_gl_lite.error("Goo.gl returned error message: " + response.error_message);
+				goo_gl_lite.error(stringBundle.getFormattedString("returned_error_message", [response.error_message]));
 			}
-			goo_gl_lite.notify(response.short_url + " has been copied to the clipboard.  Shortened from " + long_url, "PRIORITY_INFO_MEDIUM");
+			goo_gl_lite.notify(stringBundle.getFormattedString("copied_to_clipboard", [response.short_url, long_url]), "PRIORITY_INFO_MEDIUM");
 			gClipboardHelper.copyString(response.short_url);
 		}, false);
 		req.addEventListener("error", function()
 		{
-			goo_gl_lite.error("Error contacting goo.gl.  Status code: " + req.status);
+			goo_gl_lite.error(stringBundle.getFormattedString("error_contacting", [req.status]));
 		}, false);
 		req.open("POST", "http://goo.gl/api/shorten?url=" + encodeURIComponent(long_url));
 		req.setRequestHeader("X-Auth-Google-Url-Shortener", "true");
@@ -86,8 +88,9 @@ goo_gl_lite = new function()
 
 	this.error = function(error_text)
 	{
-		this.notify("Short URL creation failed: " + error_text, "PRIORITY_WARNING_MEDIUM");
-		throw new Error("[goo.gl lite] Short URL creation failed: " + error_text);
+		const creationFailed = stringBundle.getFormattedString("creation_failed", [error_text]);
+		this.notify(creationFailed, "PRIORITY_WARNING_MEDIUM");
+		throw new Error("[goo.gl lite] " + creationFailed);
 	};
 
 	this.make_from_current_page = function()

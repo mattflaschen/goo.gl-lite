@@ -32,6 +32,10 @@
 		   oncommand="goo_gl_lite.make_from_current_page();"/>
   </toolbarpalette>
 
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="goo_gl_lite_strings" src="chrome://goo.gl_lite/locale/goo.gl_lite.properties"/>
+  </stringbundleset>
+
   <popup id="contentAreaContextMenu">
     <menuitem id="context-goo_gl_lite-current" label="&goo.gl_lite.context_current_label;" accesskey="&goo.gl_lite.context_current_accesskey;" insertafter="context-bookmarkpage" oncommand="goo_gl_lite.make_from_current_page();"/>
     <menuitem id="context-goo_gl_lite-link" label="&goo.gl_lite.context_link_label;" accesskey="&goo.gl_lite.context_link_accesskey;" insertafter="context-copylink" oncommand="goo_gl_lite.make_from_link();"/>
