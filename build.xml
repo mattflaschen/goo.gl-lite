@@ -7,6 +7,9 @@
 	<property name="app.id" value="${app.name}" /> <!-- extension id like: xxx@xxx.com -->
 	<property name="ff.dir" value="" />
 
+	<defaultexcludes add="**/*.orig" />
+	<defaultexcludes add="**/*.rej" />
+
 	<condition property="ff.present">
 		<and>
 			<isset property="ff.dir" />
