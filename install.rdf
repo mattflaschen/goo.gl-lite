@@ -5,7 +5,7 @@
 
 	<Description about="urn:mozilla:install-manifest">
 		<em:name>goo.gl lite</em:name>
-		<em:version>1.7</em:version>
+		<em:version>1.7.2</em:version>
 		<em:description>Simple extension to let you use Goo.gl, Google's URL shortener, without installing their toolbar.  Clicking the button will generate a goo.gl URL and copy it to your clipboard.  Convenient right-click menu entries are also provided.</em:description>
 		<em:creator>Matthew Flaschen (matthew.flaschen@gatech.edu)</em:creator>
 		<em:id>goo.gl_lite@matthew.flaschen.gatech.edu</em:id>
@@ -15,6 +15,14 @@
 				<em:locale>es-ES</em:locale>
 				<em:name>goo.gl lite</em:name>
 				<em:description>Complemento para usar Goo.gl, abreviador de enlaces de Google, sin instalar su barra de herramientas. Al pulsar el comando se genera y se copia un enlace de goo.gl. Se crean convenientes elementos de contexto.</em:description>
+			</Description>
+		</em:localized>
+		<em:translator>Nick Saukin (ru-RU) (id@open.by)</em:translator>
+		<em:localized>
+			<Description>
+				<em:locale>ru-RU</em:locale>
+				<em:name>goo.gl lite</em:name>
+				<em:description>Простое расширение позволяет использовать Goo.gl, сервис сокращения ссылок Google, без установки их панели инструментов. При нажатии на кнопку будет генерироваться сокращённый адрес будет генерироваться и копироваться в буфер обмена. Также появляются удобные функции в контекстном меню ссылок.</em:description>
 			</Description>
 		</em:localized>
 		<em:targetApplication>

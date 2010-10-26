@@ -2,5 +2,6 @@ content goo.gl_lite jar:chrome/goo.gl_lite.jar!/content/
 overlay	chrome://browser/content/browser.xul chrome://goo.gl_lite/content/goo.gl_lite.xul
 locale	goo.gl_lite	en-US		jar:chrome/goo.gl_lite.jar!/locale/en-US/
 locale	goo.gl_lite	es-ES		jar:chrome/goo.gl_lite.jar!/locale/es-ES/
+locale	goo.gl_lite	ru-RU		jar:chrome/goo.gl_lite.jar!/locale/ru-RU/
 skin	goo.gl_lite	classic/1.0	jar:chrome/goo.gl_lite.jar!/skin/
 style 	chrome://global/content/customizeToolbar.xul	chrome://goo.gl_lite/skin/goo.gl_lite.css 	
