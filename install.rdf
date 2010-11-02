@@ -28,6 +28,15 @@
 				<em:translator>Nick Saukin (id@open.by)</em:translator>
 			</Description>
 		</em:localized>
+		<em:localized>
+			<Description>
+				<em:locale>zh-TW</em:locale>
+				<em:name>goo.gl lite</em:name>
+				<em:description>這是一個讓您不用安裝 Google 工具列就可以使用 Google's URL shortener (Goo.gl) 縮址服務的簡便的擴充套件。您只要按個按鈕就會產生好 goo.gl 縮址並且複製進您的剪貼簿。此外還提供了一些便利的右鍵選單項目可以使用。</em:description>
+				<em:creator>Matthew Flaschen (matthew.flaschen@gatech.edu)</em:creator>
+				<em:translator>Goldie Lin (goldie.lin@gmail.com)</em:translator>
+			</Description>
+		</em:localized>
 		<em:targetApplication>
 			<!-- Firefox -->
 			<Description>

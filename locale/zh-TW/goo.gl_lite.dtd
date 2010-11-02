@@ -1,6 +1,6 @@
 <!--
     goo.gl lite, url shortening without the extra weight.
-    Copyright (C) 2009 Matthew Flaschen, Ricardo A. Rivas
+    Copyright (C) 2009 Matthew Flaschen, Goldie Lin
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,10 +17,10 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 <!ENTITY goo.gl_lite.toolbar_button_label "Goo.gl">
-<!ENTITY goo.gl_lite.toolbar_button_tooltip "Copiar enlace de goo.gl para este sitio">
-<!ENTITY goo.gl_lite.context_current_label "Copiar enlace de goo.gl para este sitio">
+<!ENTITY goo.gl_lite.toolbar_button_tooltip "複製目前頁面的 Goo.gl 縮址到剪貼簿。">
+<!ENTITY goo.gl_lite.context_current_label "複製此網頁的 Goo.gl 縮址">
 <!ENTITY goo.gl_lite.context_current_accesskey "G">
-<!ENTITY goo.gl_lite.context_link_label "Copiar enlace de goo.gl para este enlace">
+<!ENTITY goo.gl_lite.context_link_label "複製此鏈結的 Goo.gl 縮址">
 <!ENTITY goo.gl_lite.context_link_accesskey "l">
-<!ENTITY goo.gl_lite.context_image_url_label "Copiar enlace de goo.gl para esta imagen">
+<!ENTITY goo.gl_lite.context_image_url_label "複製此圖片的 Goo.gl 縮址">
 <!ENTITY goo.gl_lite.context_image_url_accesskey "U">
