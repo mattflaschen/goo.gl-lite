@@ -5,10 +5,11 @@
 
 	<Description about="urn:mozilla:install-manifest">
 		<em:name>goo.gl lite</em:name>
-		<em:version>1.7.4</em:version>
+		<em:version>1.7.5</em:version>
 		<em:description>Simple extension to let you use Goo.gl, Google's URL shortener, without installing their toolbar.  Clicking the button will generate a goo.gl URL and copy it to your clipboard.  Convenient right-click menu entries are also provided.</em:description>
 		<em:creator>Matthew Flaschen (matthew.flaschen@gatech.edu)</em:creator>
 		<em:id>goo.gl_lite@matthew.flaschen.gatech.edu</em:id>
+		<em:homepageURL>https://addons.mozilla.org/firefox/addon/55308/</em:homepageURL>
 		<!-- Global properties have to be repeated in the localizations due to bug 416350 -->
 		<em:localized>
 			<Description>
@@ -17,6 +18,7 @@
 				<em:description>Complemento para usar Goo.gl, abreviador de enlaces de Google, sin instalar su barra de herramientas. Al pulsar el comando se genera y se copia un enlace de goo.gl. Se crean convenientes elementos de contexto.</em:description>
 				<em:creator>Matthew Flaschen (matthew.flaschen@gatech.edu)</em:creator>
 				<em:translator>Ricardo A. Rivas (rivica@gmail.com)</em:translator>
+				<em:homepageURL>https://addons.mozilla.org/firefox/addon/55308/</em:homepageURL>
 			</Description>
 		</em:localized>
 		<em:localized>
@@ -26,6 +28,7 @@
 				<em:description>Простое расширение позволяет использовать Goo.gl, сервис сокращения ссылок Google, без установки их панели инструментов. При нажатии на кнопку сокращённый адрес будет генерироваться и копироваться в буфер обмена.</em:description>
 				<em:creator>Matthew Flaschen (matthew.flaschen@gatech.edu)</em:creator>
 				<em:translator>Nick Saukin (id@open.by)</em:translator>
+				<em:homepageURL>https://addons.mozilla.org/firefox/addon/55308/</em:homepageURL>
 			</Description>
 		</em:localized>
 		<em:localized>
@@ -35,6 +38,7 @@
 				<em:description>這是一個讓您不用安裝 Google 工具列就可以使用 Google's URL shortener (Goo.gl) 縮址服務的簡便的擴充套件。您只要按個按鈕就會產生好 goo.gl 縮址並且複製進您的剪貼簿。此外還提供了一些便利的右鍵選單項目可以使用。</em:description>
 				<em:creator>Matthew Flaschen (matthew.flaschen@gatech.edu)</em:creator>
 				<em:translator>Goldie Lin (goldie.lin@gmail.com)</em:translator>
+				<em:homepageURL>https://addons.mozilla.org/firefox/addon/55308/</em:homepageURL>
 			</Description>
 		</em:localized>
 		<em:targetApplication>
