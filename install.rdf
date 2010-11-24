@@ -41,6 +41,16 @@
 				<em:homepageURL>https://addons.mozilla.org/firefox/addon/55308/</em:homepageURL>
 			</Description>
 		</em:localized>
+		<em:localized>
+			<Description>
+				<em:locale>ja-JP</em:locale>
+				<em:name>goo.gl lite</em:name>
+				<em:description>GoogleツールバーをインストールせずにGoogleの短縮URL (Goo.gl)を使用することができます。ボタンをクリックすると作成されたgoo.gl短縮URLがクリップボードにコピーされます。右クリックメニューからの変換にも対応しています。</em:description>
+				<em:creator>Matthew Flaschen (matthew.flaschen@gatech.edu)</em:creator>
+				<em:translator>Hiroki Kobayashi (carlylevendits@gmail.com)</em:translator>
+				<em:homepageURL>https://addons.mozilla.org/firefox/addon/55308/</em:homepageURL>
+			</Description>
+		</em:localized>
 		<em:targetApplication>
 			<!-- Firefox -->
 			<Description>
