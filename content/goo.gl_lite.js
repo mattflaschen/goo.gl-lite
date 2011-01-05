@@ -23,8 +23,12 @@ goo_gl_lite = new function()
 	getService(Components.interfaces.nsIClipboardHelper);
 
 	var stringBundle;
-	const notificationValue = "goo.gl lite notification";
-	const iconURL = "chrome://goo.gl_lite/skin/icon_16x16.png";
+	const NOTIFICATION_VALUE = "goo.gl lite notification";
+	const ICON_URL = "chrome://goo.gl_lite/skin/icon_16x16.png";
+
+	const KEY = "AIzaSyAC1J1zIznmnMaLtNZalUVcfz4lmqO9Xnk";
+
+	const INSERT_URL = "https://www.googleapis.com/urlshortener/v1/url?key=" + KEY;
 
 	/**
 	 * Basic initiation
@@ -55,20 +59,21 @@ goo_gl_lite = new function()
 		req.addEventListener("load", function()
 		{
 			var response = JSON.parse(req.responseText);
-			if(response.error_message)
+			if(response.error)
 			{
-				goo_gl_lite.error(stringBundle.getFormattedString("returned_error_message", [response.error_message]));
+				goo_gl_lite.error(stringBundle.getFormattedString("returned_error_message", [response.error.message]));
 			}
-			goo_gl_lite.notify(stringBundle.getFormattedString("copied_to_clipboard", [response.short_url, long_url]), "PRIORITY_INFO_MEDIUM");
-			gClipboardHelper.copyString(response.short_url);
+			var short_url = response.id;
+			goo_gl_lite.notify(stringBundle.getFormattedString("copied_to_clipboard", [short_url, long_url]), "PRIORITY_INFO_MEDIUM");
+			gClipboardHelper.copyString(short_url);
 		}, false);
 		req.addEventListener("error", function()
 		{
 			goo_gl_lite.error(stringBundle.getFormattedString("error_contacting", [req.status]));
 		}, false);
-		req.open("POST", "http://goo.gl/api/shorten?url=" + encodeURIComponent(long_url));
-		req.setRequestHeader("X-Auth-Google-Url-Shortener", "true");
-		req.send();
+		req.open("POST", INSERT_URL);
+		req.setRequestHeader("Content-Type", "application/json");
+		req.send(JSON.stringify({longUrl: long_url}));
 	};
 
 	/**
@@ -79,10 +84,10 @@ goo_gl_lite = new function()
 	{
 		var notifyBox = window.getNotificationBox(top.getBrowser().selectedBrowser.contentWindow);
 		notifyBox.removeAllNotifications(false);
-		notifyBox.appendNotification("Goo.gl Lite: " + text, this.notificationValue, this.iconURL, notifyBox[priorityKey], null);
+		var notification = notifyBox.appendNotification("Goo.gl Lite: " + text, NOTIFICATION_VALUE, ICON_URL, notifyBox[priorityKey], null);
 		setTimeout(function()
 		{
-		        notifyBox.removeAllNotifications(false);
+			notifyBox.removeNotification(notification);
 		}, 5000);
 	};
 
