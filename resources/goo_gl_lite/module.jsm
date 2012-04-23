@@ -1,10 +1,29 @@
-var EXPORTED_SYMBOLS = ["goo_gl_lite_module"];
+/*
+    goo.gl lite, url shortening without the extra weight.
+    Copyright (C) 2009-2012 Matthew Flaschen
 
-Components.utils.import("resource://oauthorizer/modules/oauth.js");
-Components.utils.import("resource://oauthorizer/modules/oauthconsumer.js");
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+*/
+
+var EXPORTED_SYMBOLS = ["goo_gl_lite_module"];
 
 goo_gl_lite_module = new function()
 {
+	Components.utils.import("resource://oauthorizer/modules/oauth.js");
+	Components.utils.import("resource://oauthorizer/modules/oauthconsumer.js");
+
 	const Cc = Components.classes, Ci = Components.interfaces, Cr = Components.results;
 
 	const CONSOLE_SERVICE = Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService);
@@ -31,7 +50,7 @@ goo_gl_lite_module = new function()
 	{
 		signatureMethod     : "HMAC-SHA1",
 		userAuthorizationURL: "https://accounts.google.com/o/oauth2/auth",
-		accessTokenURL      : "https://accounts.google.com/o/oauth2/token",
+		accessTokenURL      : "https://accounts.google.com/o/oauth2/token"
 	};
 	const OAUTH_VERSION = "2.0";
 
@@ -42,7 +61,6 @@ goo_gl_lite_module = new function()
 
 	function handleUserAuthorization(serviceObj, successCallback, errorCallback)
 	{
-		dump("*********FINISHED**********\naccess token: "+ serviceObj.token+"\n  secret: "+serviceObj.tokenSecret+"\n");
 		// service = serviceObj;
 		getTokensFromCode(serviceObj.token, successCallback, errorCallback);
 	};
@@ -50,7 +68,6 @@ goo_gl_lite_module = new function()
 	// Hack to exchange code for token
 	function getTokensFromCode(token, successCallback, errorCallback)
 	{
-		dump("Entering getTokensFromCode\n");
 
 		sendTokenRequest({
 			code: token,
@@ -67,15 +84,11 @@ goo_gl_lite_module = new function()
 	 */
 	function sendTokenRequest(parameters, successCallback, errorCallback)
 	{
-		dump("Entering sendTokenRequest");
 		parameters.client_id = OAUTH_KEY;
 		parameters.client_secret = OAUTH_SECRET;
-		dump("parameters: " + JSON.stringify(parameters) + "\n");
 		var req = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance(Ci.nsIXMLHttpRequest);
 		req.addEventListener("load", function()
 		{
-			dump("sendTokenRequest load\n");
-			dump("responseText: " + req.responseText + "\n")
 			var response = JSON.parse(req.responseText);
                         if(response.error)
                         {
@@ -90,20 +103,17 @@ goo_gl_lite_module = new function()
 
 		req.addEventListener("error", function()
 		{
-			dump("sendTokenRequest error\n");
 			errorCallback("Authentication network request failed");
 		}, false);
 
 		req.open("POST", OAUTH_PROVIDER_CALLS.accessTokenURL);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		var body = OAuth.formEncode(parameters);
-		dump("body: " + body + "\n");
 		req.send(body);
 	};
 
 	function storeAuthenticationDetails(response)
 	{
-		dump("storeAuthenticationDetails: " + JSON.stringify(response) + "\n");
 		var branch = getBranch();
 		branch.setCharPref("access_token", response.access_token);
 		// Only get refresh token the first time, so we should be sure not to erase it
@@ -145,15 +155,12 @@ goo_gl_lite_module = new function()
 	 */
 	function authorize(successCallback, errorCallback)
 	{
-		dump("Entering authorize\n");
-
 		var branch = getBranch();
 		var time = (new Date()).getTime();
 		var expiration = + branch.getCharPref("expiration");
 		var accessToken = branch.getCharPref("access_token");
 		if (accessToken && time < expiration)
 		{
-			dump("Unexpired token");
 			successCallback();
 			return;
 		}
@@ -179,21 +186,17 @@ goo_gl_lite_module = new function()
 
 	function sendRequest(message, callback)
 	{
-		dump("Calling OAuthConsumer\n");
-		dump(JSON.stringify(message) + "\n");
 		// XXX Since we're doing part of the OAuth flow, we mock a service with just the token and version
 		var service =
 		{
 			token: getBranch().getCharPref("access_token"),
 			version: OAUTH_VERSION
-		}
-		dump("service: " + JSON.stringify(service));
+		};
 		OAuthConsumer.call(service, message, callback);
 	}
 
 	function sendShortUrlRequest(longUrl, successCallback, errorCallback)
 	{
-		dump("Entering sendShortUrlRequest\n");
 		var message =
 		{
 			action: INSERT_URL,
@@ -203,15 +206,12 @@ goo_gl_lite_module = new function()
 		};
 		sendRequest(message, function(req)
 		{
-			dump("API callback\n");
-			dump("req.responseText: " + req.responseText + "\n");
 			var response = JSON.parse(req.responseText);
 			if(response.error)
 			{
 				errorCallback(response.error.message);
 			}
 			var shortUrl = response.id;
-			dump("short url: " + shortUrl + "\n")
 			successCallback(shortUrl);
 		});
 	}
