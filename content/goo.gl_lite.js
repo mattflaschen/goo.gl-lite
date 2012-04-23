@@ -17,32 +17,21 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+Components.utils.import("resource://goo_gl_lite/module.jsm");
+
 goo_gl_lite = new function()
 {
-	const gClipboardHelper = Components.classes["@mozilla.org/widget/clipboardhelper;1"].
-	getService(Components.interfaces.nsIClipboardHelper);
-
-	var stringBundle;
 	const NOTIFICATION_VALUE = "goo.gl lite notification";
 	const ICON_URL = "chrome://goo.gl_lite/skin/icon_16x16.png";
 
-	const KEY = "AIzaSyAC1J1zIznmnMaLtNZalUVcfz4lmqO9Xnk";
+	const CLIPBOARD_HELPER = Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper);
 
-	const INSERT_URL = "https://www.googleapis.com/urlshortener/v1/url?key=" + KEY;
-
-	/**
-	 * Basic initiation
-	 */
-	this.init = function()
-	{
-		document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", goo_gl_lite.popupshowing, false);
-		stringBundle = document.getElementById("goo_gl_lite_strings");
-	};
+	var stringBundle;
 
 	/**
 	 * Show/hide context menu entries on demand
 	 */
-	this.popupshowing = function()
+	function popupshowing()
 	{
 		gContextMenu.showItem("context-goo_gl_lite-current", !(gContextMenu.isContentSelected || gContextMenu.onTextInput || gContextMenu.onLink || gContextMenu.onImage || gContextMenu.onVideo || gContextMenu.onAudio)); // Shows Copy Goo.gl URL for This Page whenever Bookmark This Page is shown
 		gContextMenu.showItem("context-goo_gl_lite-link", gContextMenu.onLink && !gContextMenu.onMailtoLink); // Shows Copy Goo.gl URL for Link Location whenver Bookmark this Link is shown.
@@ -50,37 +39,10 @@ goo_gl_lite = new function()
 	};
 
 	/**
-	 * Makes a short url from long_url
-	 * @param long_url long url, unescaped.
-	 */
-	this.make_short_url = function(long_url)
-	{
-		var req = new XMLHttpRequest();
-		req.addEventListener("load", function()
-		{
-			var response = JSON.parse(req.responseText);
-			if(response.error)
-			{
-				goo_gl_lite.error(stringBundle.getFormattedString("returned_error_message", [response.error.message]));
-			}
-			var short_url = response.id;
-			goo_gl_lite.notify(stringBundle.getFormattedString("copied_to_clipboard", [short_url, long_url]), "PRIORITY_INFO_MEDIUM");
-			gClipboardHelper.copyString(short_url);
-		}, false);
-		req.addEventListener("error", function()
-		{
-			goo_gl_lite.error(stringBundle.getFormattedString("error_contacting", [req.status]));
-		}, false);
-		req.open("POST", INSERT_URL);
-		req.setRequestHeader("Content-Type", "application/json");
-		req.send(JSON.stringify({longUrl: long_url}));
-	};
-
-	/**
 	 * @param text Text of notification
 	 * @param priorityKey key to specify priority, as string
 	 */
-	this.notify = function(text, priorityKey)
+	function notify(text, priorityKey)
 	{
 		var notifyBox = window.getNotificationBox(top.getBrowser().selectedBrowser.contentWindow);
 		notifyBox.removeAllNotifications(false);
@@ -91,26 +53,64 @@ goo_gl_lite = new function()
 		}, 5000);
 	};
 
-	this.error = function(error_text)
+	function handleError(errorText)
 	{
-		const creationFailed = stringBundle.getFormattedString("creation_failed", [error_text]);
-		this.notify(creationFailed, "PRIORITY_WARNING_MEDIUM");
-		throw new Error("[goo.gl lite] " + creationFailed);
+		notify(errorText, "PRIORITY_WARNING_MEDIUM");
+		throw new Error("[goo.gl lite] " + errorText);
+	};
+
+	function handleAuthenticationError(details)
+	{
+		handleError(stringBundle.getFormattedString("authentication_failed", [details]));
+	};
+
+	function handleCreationError(errorText)
+	{
+		const creationFailed = stringBundle.getFormattedString("creation_failed", [errorText]);
+		handleError(creationFailed);
+	};
+
+	function handleReturnedError(returnedMessage)
+	{
+		handleCreationError(stringBundle.getFormattedString("returned_error_message", [returnedMessage]));
+	};
+
+	function handleSuccess(shortUrl, longUrl)
+	{
+		notify(stringBundle.getFormattedString("copied_to_clipboard", [shortUrl, longUrl]), "PRIORITY_INFO_MEDIUM");
+		CLIPBOARD_HELPER.copyString(shortUrl);
+	}
+
+	function makeShortUrl(longUrl)
+	{
+		goo_gl_lite_module.makeShortUrl(longUrl, function(shortUrl)
+		{
+			handleSuccess(shortUrl, longUrl);
+		}, handleAuthenticationError, handleReturnedError);
+	};
+
+	/**
+	 * Basic initiation
+	 */
+	this.init = function()
+	{
+		document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", popupshowing, false);
+		stringBundle = document.getElementById("goo_gl_lite_strings");
 	};
 
 	this.make_from_current_page = function()
 	{
-		this.make_short_url(top.getBrowser().currentURI.spec);
+		makeShortUrl(top.getBrowser().currentURI.spec);
 	};
 
 	this.make_from_link = function()
 	{
-		this.make_short_url(gContextMenu.linkURL);
+		makeShortUrl(gContextMenu.linkURL);
 	};
 
 	this.make_from_image_url = function()
 	{
-		this.make_short_url(gContextMenu.target.src);
+		makeShortUrl(gContextMenu.target.src);
 	};
 }();
 

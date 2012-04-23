@@ -51,9 +51,9 @@
 				<include name="chrome.manifest" />
 				<include name="install.rdf" />
 				<include name="GPL2" />
+				<include name="resources/**" />
 				<include name="defaults/**" />
 				<exclude name="**/.*" />
-				<exclude name="**/CVS/**" />
 			</fileset>
 		</zip>
 	</target>
