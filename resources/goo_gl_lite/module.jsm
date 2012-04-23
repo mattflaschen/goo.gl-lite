@@ -26,8 +26,8 @@ goo_gl_lite_module = new function()
 
 	const Cc = Components.classes, Ci = Components.interfaces, Cr = Components.results;
 
-	const CONSOLE_SERVICE = Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService);
-	const IO_SERVICE = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+	const consoleService = Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService);
+	const ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 
 	const KEY = "AIzaSyAC1J1zIznmnMaLtNZalUVcfz4lmqO9Xnk";
 
@@ -55,22 +55,33 @@ goo_gl_lite_module = new function()
 	const OAUTH_VERSION = "2.0";
 
 	const PREF_BRANCH_NAME = 'extensions.goo_gl_lite.';
+	const prefService = Cc["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
+	const prefBranch = prefService.getBranch(PREF_BRANCH_NAME);
 
 	// var service = null;
 	// var handler = null;
 
+	/**
+	 * @param serviceObj OAuthConsumer service
+	 * @param successCallback function to call on success.  Takes a single string, the token
+	 * @param errorCallback function to call on success.  Takes a single string, the error message
+	 */
 	function handleUserAuthorization(serviceObj, successCallback, errorCallback)
 	{
 		// service = serviceObj;
 		getTokensFromCode(serviceObj.token, successCallback, errorCallback);
 	};
 
-	// Hack to exchange code for token
-	function getTokensFromCode(token, successCallback, errorCallback)
+	// Hack to exchange code for token.  Should be in OAuthConsumer
+	/**
+	 * @param code the access code
+	 * @param successCallback function to call on success.  Takes a single string, the token
+	 * @param errorCallback function to call on success.  Takes a single string, the error message
+	 */
+	function getTokensFromCode(code, successCallback, errorCallback)
 	{
-
 		sendTokenRequest({
-			code: token,
+			code: code,
 			redirect_uri: OAUTH_COMPLETION_URL,
 			scope: OAUTH_PARAMS.scope,
 			grant_type: OAUTH_CODE_GRANT_TYPE
@@ -79,7 +90,7 @@ goo_gl_lite_module = new function()
 
 	/**
 	 * @param parameters parameter object to encode and send
-	 * @param successCallback function to call on success
+	 * @param successCallback function to call on success.  Takes a single string, the token
 	 * @param errorCallback function taking a single string, an error message, to call on error
 	 */
 	function sendTokenRequest(parameters, successCallback, errorCallback)
@@ -97,7 +108,7 @@ goo_gl_lite_module = new function()
 			else
 			{
 				storeAuthenticationDetails(response);
-				successCallback();
+				successCallback(response.access_token);
 			}
 		}, false);
 
@@ -114,17 +125,16 @@ goo_gl_lite_module = new function()
 
 	function storeAuthenticationDetails(response)
 	{
-		var branch = getBranch();
-		branch.setCharPref("access_token", response.access_token);
+		prefBranch.setCharPref("access_token", response.access_token);
 		// Only get refresh token the first time, so we should be sure not to erase it
 		if(response.refresh_token)
 		{
-			branch.setCharPref("refresh_token", response.refresh_token);
+			prefBranch.setCharPref("refresh_token", response.refresh_token);
 		}
-		branch.setCharPref("token_type", response.token_type);
+		prefBranch.setCharPref("token_type", response.token_type);
 		var time = (new Date()).getTime();
 		var expirationTime = time + (response.expires_in * 1000);
-		branch.setCharPref("expiration", expirationTime);
+		prefBranch.setCharPref("expiration", expirationTime);
 	};
 
 	// Only Google's OAuth 1 is currently built in.
@@ -141,31 +151,24 @@ goo_gl_lite_module = new function()
 		OAuthConsumer._providers[OAUTH_PROVIDER_NAME] = myProviderCall;
 	};
 
-	function getBranch()
-	{
-		const prefService = Cc["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
-		return prefService.getBranch(PREF_BRANCH_NAME);
-	}
-
 	/**
-	 * Attempts to authorize the user, then calls the success callback or error callback as appropriate.
+	 * Attempts to ensure the user is authorized, then calls the success callback or error callback as appropriate.
 	 *
-	 * @param successCallback function to call on success
+	 * @param successCallback function to call on successful authorization.  Takes a single string, the token
 	 * @param errorCallback function taking a single string, an error message, to call on error
 	 */
 	function authorize(successCallback, errorCallback)
 	{
-		var branch = getBranch();
 		var time = (new Date()).getTime();
-		var expiration = + branch.getCharPref("expiration");
-		var accessToken = branch.getCharPref("access_token");
+		var expiration = + prefBranch.getCharPref("expiration");
+		var accessToken = prefBranch.getCharPref("access_token");
 		if (accessToken && time < expiration)
 		{
-			successCallback();
+			successCallback(accessToken);
 			return;
 		}
 
-		var refreshToken = branch.getCharPref("refresh_token");
+		var refreshToken = prefBranch.getCharPref("refresh_token");
 		if(refreshToken)
 		{
 			sendTokenRequest(
@@ -184,18 +187,52 @@ goo_gl_lite_module = new function()
 		}, OAUTH_PARAMS);
 	}
 
-	function sendRequest(message, callback)
+	/**
+	 * Sends a request, authenticated or not, according to the user's preference
+	 *
+	 * @param message message to send, fitting the OAuth library's envelope
+	 * @param callback function to call with response to request, success or failure, taking the XMLHttpRequest object
+	 * @param authenticationErrorCallback function to call, taking a single error message, on authentication failure before the message is sent.
+	 */
+	function sendRequest(message, callback, authenticationErrorCallback)
 	{
-		// XXX Since we're doing part of the OAuth flow, we mock a service with just the token and version
-		var service =
+		if(prefBranch.getBoolPref("authenticate"))
 		{
-			token: getBranch().getCharPref("access_token"),
-			version: OAUTH_VERSION
-		};
-		OAuthConsumer.call(service, message, callback);
+			authorize(function(token)
+			{
+				// XXX Since we're doing part of the OAuth flow, we mock a service with just the token and version
+				var service =
+				{
+					name: OAUTH_PROVIDER_NAME,
+					token: token,
+					version: OAUTH_VERSION
+				};
+				OAuthConsumer.call(service, message, callback);
+			}, authenticationErrorCallback);
+		}
+		else
+		{
+			var req = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance(Ci.nsIXMLHttpRequest);
+			req.open(message.method, message.action);
+			req.setRequestHeader("Content-Type", message.contentType);
+			req.addEventListener("load", function()
+			{
+				callback(req);
+			}, false); // XXX neither this nor oauthconsumer handles network-level errors.
+			req.send(message.parameters);
+		}
 	}
 
-	function sendShortUrlRequest(longUrl, successCallback, errorCallback)
+	// We can not store any error callback in a field anywhere in the module, since the module is a singleton, and the error callbacks are specific to particular windows.
+	/**
+	 * Makes a short url from longUrl
+	 *
+	 * @param longUrl long url, unescaped.
+	 * @param successCallback function to call on success, taking the short URL
+	 * @param authenticationErrorCallback function to call on authentication error, taking a single string parameter, the error
+	 * @param creationErrorCallback function to call on error creating URL, taking a single string parameter, the error
+	 */
+	this.makeShortUrl = function(longUrl, successCallback, authenticationErrorCallback, creationErrorCallback)
 	{
 		var message =
 		{
@@ -209,26 +246,10 @@ goo_gl_lite_module = new function()
 			var response = JSON.parse(req.responseText);
 			if(response.error)
 			{
-				errorCallback(response.error.message);
+				creationErrorCallback(response.error.message);
 			}
 			var shortUrl = response.id;
 			successCallback(shortUrl);
-		});
-	}
-
-	// We can not store errorCallback in a field anywhere in the module, since the module is a singleton, and the errorCallback is specific to a particular window
-	/**
-	 * Makes a short url from longUrl
-	 *
-	 * @param longUrl long url, unescaped.
-	 * @param successCallback function to call on success, taking the short URL
-	 * @param errorCallback function to call on error, taking a single string parameter, the error
-	 */
-	this.makeShortUrl = function(longUrl, successCallback, authenticationErrorCallback, creationErrorCallback)
-	{
-		authorize(function()
-		{
-			sendShortUrlRequest(longUrl, successCallback, creationErrorCallback)
 		}, authenticationErrorCallback);
 	};
 }();

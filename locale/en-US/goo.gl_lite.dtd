@@ -24,3 +24,4 @@
 <!ENTITY goo.gl_lite.context_link_accesskey "l">
 <!ENTITY goo.gl_lite.context_image_url_label "Copy Goo.gl URL for Image Location">
 <!ENTITY goo.gl_lite.context_image_url_accesskey "U">
+<!ENTITY goo.gl_lite.authenticate_option "Connect to my Google account">

@@ -5,11 +5,13 @@
 
 	<Description about="urn:mozilla:install-manifest">
 		<em:name>goo.gl lite</em:name>
-		<em:version>1.8.1.75</em:version>
+		<em:version>1.9</em:version>
 		<em:description>Simple extension to let you use Goo.gl, Google's URL shortener, without installing their toolbar.  Clicking the button will generate a goo.gl URL and copy it to your clipboard.  Convenient right-click menu entries are also provided.</em:description>
 		<em:creator>Matthew Flaschen (matthew.flaschen@gatech.edu)</em:creator>
 		<em:id>goo.gl_lite@matthew.flaschen.gatech.edu</em:id>
 		<em:homepageURL>https://addons.mozilla.org/firefox/addon/55308/</em:homepageURL>
+		<em:optionsURL>chrome://goo.gl_lite/content/options.xul</em:optionsURL>  
+		<em:optionsType>2</em:optionsType>
 		<em:type>2</em:type> <!-- extension -->
 		<em:unpack>true</em:unpack>
 		<!-- Global properties have to be repeated in the localizations due to bug 416350 -->
@@ -57,7 +59,7 @@
 			<!-- Firefox -->
 			<Description>
 				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-				<em:minVersion>3.5</em:minVersion>
+				<em:minVersion>7</em:minVersion>
 				<em:maxVersion>12.*</em:maxVersion>
 			</Description>
 		</em:targetApplication>

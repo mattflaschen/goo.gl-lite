@@ -24,7 +24,7 @@ goo_gl_lite = new function()
 	const NOTIFICATION_VALUE = "goo.gl lite notification";
 	const ICON_URL = "chrome://goo.gl_lite/skin/icon_16x16.png";
 
-	const CLIPBOARD_HELPER = Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper);
+	const clipboardHelper = Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper);
 
 	var stringBundle;
 
@@ -78,7 +78,7 @@ goo_gl_lite = new function()
 	function handleSuccess(shortUrl, longUrl)
 	{
 		notify(stringBundle.getFormattedString("copied_to_clipboard", [shortUrl, longUrl]), "PRIORITY_INFO_MEDIUM");
-		CLIPBOARD_HELPER.copyString(shortUrl);
+		clipboardHelper.copyString(shortUrl);
 	}
 
 	function makeShortUrl(longUrl)
