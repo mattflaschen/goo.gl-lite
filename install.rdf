@@ -55,6 +55,16 @@
 				<em:homepageURL>https://addons.mozilla.org/firefox/addon/55308/</em:homepageURL>
 			</Description>
 		</em:localized>
+		<em:localized>
+			<Description>
+				<em:locale>cs-CZ</em:locale>
+				<em:name>goo.gl lite</em:name>
+				<em:description>Jednoduché rozšíření, které vám umožní používat Goo.gl (Google's URL Shortener) bez nutnosti instalovat lištu Google Toolbar. Kliknutím na tlačítko vygenerujete goo.gl URL, která bude zkopírována do vaší schránky. K dispozici jsou i pohodlné položky v nabídkách po kliknutí pravým tlačítkem.</em:description>
+				<em:creator>Matthew Flaschen (matthew.flaschen@gatech.edu)</em:creator>
+				<em:translator>Michal Stanke (michal.stanke@mikk.cz)</em:translator>
+				<em:homepageURL>https://addons.mozilla.org/firefox/addon/55308/</em:homepageURL>
+			</Description>
+		</em:localized> 
 		<em:targetApplication>
 			<!-- Firefox -->
 			<Description>

@@ -51,6 +51,7 @@
 				<include name="chrome.manifest" />
 				<include name="install.rdf" />
 				<include name="GPL2" />
+				<include name="CONTRIBUTORS" />
 				<include name="resources/**" />
 				<include name="defaults/**" />
 				<exclude name="**/.*" />

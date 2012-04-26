@@ -6,6 +6,7 @@ locale	goo.gl_lite	es-ES		jar:chrome/goo.gl_lite.jar!/locale/es-ES/
 locale	goo.gl_lite	ru-RU		jar:chrome/goo.gl_lite.jar!/locale/ru-RU/
 locale	goo.gl_lite	zh-TW		jar:chrome/goo.gl_lite.jar!/locale/zh-TW/
 locale	goo.gl_lite	ja-JP		jar:chrome/goo.gl_lite.jar!/locale/ja-JP/
+locale	goo.gl_lite	cs-CZ		jar:chrome/goo.gl_lite.jar!/locale/cs-CZ/
 locale  oauthorizer     en-US		resources/oauthorizer/locale/en-US/
 skin	goo.gl_lite	classic/1.0	jar:chrome/goo.gl_lite.jar!/skin/
 skin	oauthorizer	classic/1.0	resources/oauthorizer/skin/
