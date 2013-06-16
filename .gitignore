@@ -1,5 +1,3 @@
-syntax: glob
-
 chrome/*.jar
 chrome/*.xpi
 dist
